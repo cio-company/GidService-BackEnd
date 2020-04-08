@@ -49,7 +49,6 @@ public class Organization {
 
     public Organization(OrganizationRequestEntity entity) {
         this.description = entity.getDescription();
-        //this.location = entity.getLocation();
         this.name = entity.getName();
         this.rating = entity.getRating();
         this.services = entity.getServices();

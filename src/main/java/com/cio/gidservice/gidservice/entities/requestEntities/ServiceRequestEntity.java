@@ -8,8 +8,6 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Data
 public class ServiceRequestEntity extends Service {
-    @NotEmpty
     private String userIP;
-    @PositiveOrZero
     private Long organizationID;
 }

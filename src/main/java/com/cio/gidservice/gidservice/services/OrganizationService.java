@@ -31,7 +31,7 @@ public class OrganizationService {
     private UserRepository userRepository;
 
 
-    public List<Organization> findAllByUserId(Long id) throws NonAuthorizedAccess {
+    public List<Organization> findAllByUserId(Long id) {
         return organizationRepository.findOrganizationsByUserId(id);
     }
 
@@ -79,5 +79,4 @@ public class OrganizationService {
     public List<Organization> getAll() {
         return organizationRepository.findAll();
     }
-
 }
