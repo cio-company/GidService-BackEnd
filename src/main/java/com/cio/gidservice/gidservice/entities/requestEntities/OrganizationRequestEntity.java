@@ -12,7 +12,6 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 public class OrganizationRequestEntity extends Organization {
 
-    @PositiveOrZero
     private String ip;
 
     @Override

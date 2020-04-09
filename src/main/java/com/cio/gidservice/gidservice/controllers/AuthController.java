@@ -2,6 +2,7 @@ package com.cio.gidservice.gidservice.controllers;
 
 import com.cio.gidservice.gidservice.entities.databaseEntities.Logs;
 import com.cio.gidservice.gidservice.entities.databaseEntities.User;
+import com.cio.gidservice.gidservice.entities.requestEntities.LogsRequestEntity;
 import com.cio.gidservice.gidservice.entities.requestEntities.UserRequestEntity;
 import com.cio.gidservice.gidservice.errors.RegistrationException;
 import com.cio.gidservice.gidservice.services.LoginService;
@@ -23,8 +24,8 @@ public class AuthController {
     @Autowired
     private RegistrationService registrationService;
 
-    @GetMapping("/login")
-    public ResponseEntity<?> trySignIn(@RequestBody Logs logs) {
+    @GetMapping("/sign_in")
+    public ResponseEntity<?> trySignIn(@RequestBody LogsRequestEntity logs) {
         try{
             return new ResponseEntity<>(loginService.trySignIn(logs), HttpStatus.OK);
         } catch(Exception e) {

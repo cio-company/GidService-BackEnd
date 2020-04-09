@@ -1,6 +1,7 @@
 package com.cio.gidservice.gidservice.entities.databaseEntities;
 
 
+import com.cio.gidservice.gidservice.entities.requestEntities.LogsRequestEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,16 +22,10 @@ public class Logs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @PositiveOrZero
     private Long id;
-    @PositiveOrZero
     private Long userID;
-    @NotEmpty
-    @Size(min = 6, max = 100, message = "password must be between 6 and 100 characters")
     private String password;
-    @FutureOrPresent
     private LocalDateTime time;
-    @NotEmpty
     private String ip;
 
     public Logs(Long userID, String password, LocalDateTime localDateTime, String ip) {
@@ -38,6 +33,14 @@ public class Logs {
         this.password = password;
         this.time = localDateTime;
         this.ip = ip;
+    }
+
+    public Logs(LogsRequestEntity entity) {
+        setTime(LocalDateTime.now());
+        setId(entity.getId());
+        setIp(entity.getIp());
+        setPassword(entity.getPassword());
+        setUserID(entity.getUserID());
     }
 
 }

@@ -26,19 +26,20 @@ public class OrganizationController {
     @Autowired
     private OrganizationService organizationService;
 
-
-    @GetMapping("/{user_id}/getAllOrganization")
-    public List<Organization> getAllForUser(@PathVariable(value = "user_id") Long user_id,
-                                            @RequestBody String ip){
-
-        try{
-            return organizationService.findAllByUserId(user_id);
-        } catch (NonAuthorizedAccess nonAuthorizedAccess) {
-            return null;
-        }
+    @GetMapping("/get-all")
+    public ResponseEntity<?> getAll() {
+        List<Organization> list = organizationService.getAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/{user_id}/addOrganization")
+
+    @GetMapping("/{user_id}/get-all")
+    public ResponseEntity<?> getAllForUser(@PathVariable(value = "user_id") Long user_id){
+        List<Organization> list = organizationService.findAllByUserId(user_id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @PostMapping("/{user_id}/add")
     public ResponseEntity<?> addEntity(@PathVariable Long user_id,
                                        @RequestBody OrganizationRequestEntity organization) {
         try {
