@@ -10,8 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.chrono.Chronology;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * REST-controller for manipulation with organizations and their services.
@@ -23,6 +32,8 @@ import java.util.List;
 @RequestMapping("/organization")
 public class OrganizationController {
 
+    private static final String UPLOADED_FOLDER = "D:\\MyProjects";
+
     @Autowired
     private OrganizationService organizationService;
 
@@ -30,6 +41,23 @@ public class OrganizationController {
     public ResponseEntity<?> getAll() {
         List<Organization> list = organizationService.getAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<?> uploadFile(@RequestParam MultipartFile file) {
+        try{
+            byte[] bytes = file.getBytes();
+            DateTimeFormatterBuilder.getLocalizedDateTimePattern(FormatStyle.MEDIUM, FormatStyle.MEDIUM, Chronology.ofLocale(Locale.UK), Locale.UK);
+            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Files.write(path, bytes);
+            System.out.println(path);
+            return ResponseEntity.ok()
+                    .body("Your image was save! Congratulation!");
+        }catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Something went wrong! Oops:(");
+        }
     }
 
 
