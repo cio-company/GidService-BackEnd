@@ -25,7 +25,7 @@ public class Service {
     private Long id;
     private String name;
     private String description;
-    private Integer leadTime; //minutes
+    private String imageUrl;
     private Float price;
 
     //Связь с заведением
@@ -33,14 +33,6 @@ public class Service {
     @JoinColumn(name = "organization_id", nullable = false)
     @JsonIgnore
     private Organization organization;
-
-    public Service(ServiceRequestEntity entity) {
-        this.name = entity.getName();
-        this.description = entity.getDescription();
-        this.leadTime = entity.getLeadTime();
-        this.organization = entity.getOrganization();
-        this.price = entity.getPrice();
-    }
 
     /*
     * TODO:

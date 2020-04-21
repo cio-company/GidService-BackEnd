@@ -22,13 +22,10 @@ public class RegistrationService {
     @Autowired
     private LogsRepository logsRepository;
 
-    public User register(UserRequestEntity user) throws RegistrationException {
-        if(!userRepository.existsUserByPhoneNumber(user.getPhoneNumber())) {
-            User byLogin = userRepository.save(new User(user));
-            Logs logs = new Logs(byLogin.getId(), user.getPassword(), LocalDateTime.now(), user.getIp());
-            System.out.println(logs);
-            logsRepository.save(logs);
-            return byLogin;
+    public User register(User user) throws RegistrationException {
+        if(userRepository.findByLogin(user.getLogin()) == null) {
+            user.setPhoneNumber("+380931262912");
+            return userRepository.save(user);
         }
         throw new RegistrationException();
     }

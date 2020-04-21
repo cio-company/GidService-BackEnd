@@ -33,6 +33,7 @@ public class Organization {
     private String description;
     @PositiveOrZero
     private Float rating;
+    private String imageUrl;
 
     /*@OneToOne(mappedBy = "organization")
     private Location location;*/
