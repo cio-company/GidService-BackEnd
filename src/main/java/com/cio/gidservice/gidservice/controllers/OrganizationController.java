@@ -90,7 +90,9 @@ public class OrganizationController {
     public ResponseEntity<?> addEntity(@PathVariable Long user_id,
                                        @RequestParam("photo") MultipartFile file,
                                        @RequestParam("name") String name,
-                                       @RequestParam("description") String description) {
+                                       @RequestParam("description") String description,
+                                       @RequestParam("lat") Double lat,
+                                       @RequestParam("lng") Double lng) {
         try {
             byte[] bytes = file.getBytes();
             Map uploadResult = new Cloudinary(CONFIG).uploader().upload(bytes, ObjectUtils.emptyMap());
@@ -99,6 +101,8 @@ public class OrganizationController {
             organization.setDescription(description);
             organization.setRating(5f);
             organization.setImageUrl((String) uploadResult.get("url"));
+            organization.setLat(lat);
+            organization.setLng(lng);
             organizationService.addOrganization(user_id, organization);
             return ResponseEntity.ok()
                     .body(uploadResult.get("url"));
