@@ -118,20 +118,30 @@ public class OrganizationController {
                                                       @RequestParam("photo") MultipartFile file,
                                                       @RequestParam("name") String name,
                                                       @RequestParam("description") String description,
-                                                      @RequestParam("cost") Float cost) {
+                                                      @RequestParam("cost") String cost) {
+        byte[] bytes;
         try {
-            byte[] bytes = file.getBytes();
-            Map uploadResult = new Cloudinary(CONFIG).uploader().upload(bytes, ObjectUtils.emptyMap());
-            Service service = new Service();
-            service.setName(name);
-            service.setDescription(name);
-            service.setPrice(cost);
-            service.setImageUrl((String) uploadResult.get("url"));
-            Long id = organizationService.addServiceToOrganization(org_id, service);
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("User or organization not found!", HttpStatus.NOT_FOUND);
+            bytes = file.getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        System.out.println(cost);
+        Map uploadResult;
+        try {
+            uploadResult = new Cloudinary(CONFIG).uploader().upload(bytes, ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        Service service = new Service();
+        service.setName(name);
+        service.setDescription(description);
+        service.setPrice(Float.valueOf(cost));
+        service.setImageUrl((String) uploadResult.get("url"));
+        Long id = organizationService.addServiceToOrganization(org_id, service);
+        System.out.println(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @GetMapping("/getServices")
