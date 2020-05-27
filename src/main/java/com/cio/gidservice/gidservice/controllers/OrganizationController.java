@@ -6,6 +6,7 @@ import com.cio.gidservice.gidservice.entities.requestEntities.OrganizationReques
 import com.cio.gidservice.gidservice.entities.requestEntities.ServiceRequestEntity;
 import com.cio.gidservice.gidservice.errors.LoginException;
 import com.cio.gidservice.gidservice.services.OrganizationService;
+import com.cio.gidservice.gidservice.utils.PublicIDSeparater;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +26,7 @@ import java.nio.file.Paths;
 import java.time.chrono.Chronology;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import com.cloudinary.*;
 
@@ -151,5 +149,41 @@ public class OrganizationController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PutMapping("/changeOrganization/{id_org}")
+    public ResponseEntity<?> updateOrganization(@PathVariable("id_org") Long orgId,
+                                                @RequestParam("photo") MultipartFile file,
+                                                @RequestParam("name") String name,
+                                                @RequestParam("description") String description,
+                                                @RequestParam("lat") Double lat,
+                                                @RequestParam("lng") Double lng) {
+        String prevUrl = organizationService.findOrganization(orgId).getImageUrl();
+        String newUrl = null;
+        if(file != null) {
+            PublicIDSeparater idSeparater = new PublicIDSeparater(prevUrl, "\\S+.jpg$");
+            try {
+                Map result = new Cloudinary(CONFIG).uploader().destroy(idSeparater.separate(), ObjectUtils.emptyMap());
+                result = new Cloudinary(CONFIG).uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                newUrl = (String) result.get("url");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            newUrl = prevUrl;
+        }
+        Organization organization = new Organization(orgId,
+                name, 
+                description,
+                organizationService.findOrganization(orgId).getRating(), 
+                newUrl,
+                lat,
+                lng,
+                organizationService.findOrganization(orgId).getServices(),
+                organizationService.findOrganization(orgId).getUser());
+        if(organizationService.update(organization))
+            return new ResponseEntity<>("Organization updated successfully!", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("Organization cannot be updated!", HttpStatus.EXPECTATION_FAILED);
     }
 }

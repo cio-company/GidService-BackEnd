@@ -73,4 +73,11 @@ public class OrganizationService {
     public List<Organization> getAll() {
         return organizationRepository.findAll();
     }
+
+    public boolean update(Organization organization) {
+        if(organizationRepository.save(organization) != null)
+            return true;
+        else
+            return false;
+    }
 }
