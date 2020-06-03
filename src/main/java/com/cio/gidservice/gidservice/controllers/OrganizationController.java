@@ -2,35 +2,20 @@ package com.cio.gidservice.gidservice.controllers;
 
 import com.cio.gidservice.gidservice.entities.databaseEntities.Organization;
 import com.cio.gidservice.gidservice.entities.databaseEntities.Service;
-import com.cio.gidservice.gidservice.entities.requestEntities.OrganizationRequestEntity;
-import com.cio.gidservice.gidservice.entities.requestEntities.ServiceRequestEntity;
-import com.cio.gidservice.gidservice.errors.LoginException;
 import com.cio.gidservice.gidservice.services.OrganizationService;
 import com.cio.gidservice.gidservice.utils.PublicIDSeparater;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.chrono.Chronology;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.FormatStyle;
 import java.util.*;
 
 import com.cloudinary.*;
-
-import javax.validation.Valid;
 
 /**
  * REST-controller for manipulation with organizations and their services.
@@ -185,5 +170,15 @@ public class OrganizationController {
             return new ResponseEntity<>("Organization updated successfully!", HttpStatus.OK);
         else
             return new ResponseEntity<>("Organization cannot be updated!", HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteOrganization(@RequestParam("id_org") Long orgId) {
+        try{
+            organizationService.deleteOrganization(orgId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

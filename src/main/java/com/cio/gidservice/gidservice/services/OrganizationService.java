@@ -80,4 +80,12 @@ public class OrganizationService {
         else
             return false;
     }
+
+    public void deleteOrganization(Long id) {
+        organizationRepository.deleteById(id);
+    }
+
+    public void deleteService(Long id) {
+        servicesRepository.deleteById(id);
+    }
 }
