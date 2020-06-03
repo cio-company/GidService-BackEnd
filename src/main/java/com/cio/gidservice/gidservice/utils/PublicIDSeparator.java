@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PublicIDSeparater {
+public class PublicIDSeparator {
     private String url;
     private String pattern;
 
-    public PublicIDSeparater(String url, String pattern) {
+    public PublicIDSeparator(String url, String pattern) {
         this.url = url;
         this.pattern = pattern;
     }

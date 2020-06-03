@@ -3,7 +3,7 @@ package com.cio.gidservice.gidservice.controllers;
 import com.cio.gidservice.gidservice.entities.databaseEntities.Organization;
 import com.cio.gidservice.gidservice.entities.databaseEntities.Service;
 import com.cio.gidservice.gidservice.services.OrganizationService;
-import com.cio.gidservice.gidservice.utils.PublicIDSeparater;
+import com.cio.gidservice.gidservice.utils.PublicIDSeparator;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,22 +48,13 @@ public class OrganizationController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/image")
-    public ResponseEntity<?> uploadFile(@RequestParam("photo") MultipartFile file) {
-        try {
-            byte[] bytes = file.getBytes();
-            Map uploadResult = new Cloudinary(CONFIG).uploader().upload(bytes, ObjectUtils.emptyMap());
-            return ResponseEntity.ok()
-                    .body(uploadResult.get("url"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Something went wrong! Oops:(");
-        }
+    @GetMapping("/getAllService/{user_id}")
+    public ResponseEntity<?> getAllServicesForUser(@PathVariable(value = "user_id") Long user_id) {
+        return new ResponseEntity<>(organizationService.findAllForUser(user_id), HttpStatus.OK);
     }
 
 
-    @GetMapping("/{user_id}/get-all")
+    @GetMapping("/{user_id}/get-all")   
     public ResponseEntity<?> getAllForUser(@PathVariable(value = "user_id") Long user_id) {
         List<Organization> list = organizationService.findAllByUserId(user_id);
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -146,7 +137,7 @@ public class OrganizationController {
         String prevUrl = organizationService.findOrganization(orgId).getImageUrl();
         String newUrl = null;
         if(file != null) {
-            PublicIDSeparater idSeparater = new PublicIDSeparater(prevUrl, "\\S+.jpg$");
+            PublicIDSeparator idSeparater = new PublicIDSeparator(prevUrl, "\\S+.jpg$");
             try {
                 Map result = new Cloudinary(CONFIG).uploader().destroy(idSeparater.separate(), ObjectUtils.emptyMap());
                 result = new Cloudinary(CONFIG).uploader().upload(file.getBytes(), ObjectUtils.emptyMap());

@@ -1,6 +1,7 @@
 package com.cio.gidservice.gidservice.services;
 
 import com.cio.gidservice.gidservice.entities.databaseEntities.Organization;
+import com.cio.gidservice.gidservice.entities.databaseEntities.Service;
 import com.cio.gidservice.gidservice.entities.databaseEntities.User;
 import com.cio.gidservice.gidservice.entities.requestEntities.OrganizationRequestEntity;
 import com.cio.gidservice.gidservice.entities.requestEntities.ServiceRequestEntity;
@@ -10,14 +11,14 @@ import com.cio.gidservice.gidservice.repositories.OrganizationRepository;
 import com.cio.gidservice.gidservice.repositories.ServicesRepository;
 import com.cio.gidservice.gidservice.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  */
-@Service
+@org.springframework.stereotype.Service
 public class OrganizationService {
 
     @Autowired
@@ -33,17 +34,27 @@ public class OrganizationService {
     public List<Organization> findAllByUserId(Long id) {
         return organizationRepository.findOrganizationsByUserId(id);
     }
-
     public Organization findOrganization(String name) {
         return organizationRepository.findOrganizationByName(name);
     }
     public Organization findOrganization(Long id) {
         return organizationRepository.getOne(id);
     }
-
-    public Organization findOrganizationByKeywords(String keyword) {
-        return organizationRepository.findOrganizationByDescriptionContains(keyword);
+    public Service findService(Long id) {
+        return servicesRepository.getOne(id);
     }
+    public List<Service> findServicesOrganization(Long orgId) {
+        return servicesRepository.findAllByOrganizationId(orgId);
+    }
+    public List<Service> findAllForUser(Long id) {
+        List<Service> services = new ArrayList<>();
+        List<Organization> organizations = organizationRepository.findOrganizationsByUserId(id);
+        for (Organization organization:organizations) {
+            services.addAll(organization.getServices());
+        }
+        return services;
+    }
+
 
     public Long addServiceToOrganization(Long orgId, com.cio.gidservice.gidservice.entities.databaseEntities.Service service) {
         Organization organization = organizationRepository.getOne(orgId);
