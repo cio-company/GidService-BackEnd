@@ -54,7 +54,7 @@ public class OrganizationController {
     }
 
 
-    @GetMapping("/{user_id}/get-all")   
+    @GetMapping("/{user_id}/get-all")
     public ResponseEntity<?> getAllForUser(@PathVariable(value = "user_id") Long user_id) {
         List<Organization> list = organizationService.findAllByUserId(user_id);
         return new ResponseEntity<>(list, HttpStatus.OK);
