@@ -26,21 +26,19 @@ public class Logs {
     private Long userID;
     private String password;
     private LocalDateTime time;
-    private String ip;
 
-    public Logs(Long userID, String password, LocalDateTime localDateTime, String ip) {
+    public Logs(Long userID, String password, LocalDateTime localDateTime) {
+        this.id = userID;
         this.userID = userID;
         this.password = password;
         this.time = localDateTime;
-        this.ip = ip;
     }
 
-    public Logs(LogsRequestEntity entity) {
+    public Logs(User entity) {
         setTime(LocalDateTime.now());
         setId(entity.getId());
-        setIp(entity.getIp());
         setPassword(entity.getPassword());
-        setUserID(entity.getUserID());
+        setUserID(entity.getId());
     }
 
 }

@@ -11,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,6 +34,9 @@ public class Organization {
     private String description;
     @PositiveOrZero
     private Float rating;
+    private String imageUrl;
+    private Double lat;
+    private Double lng;
 
     /*@OneToOne(mappedBy = "organization")
     private Location location;*/

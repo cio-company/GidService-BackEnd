@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -26,7 +27,6 @@ public class User {
     private String phoneNumber;
     private String login;
     private String password;
-
     private String name;
 
     //Связь с заведениями, которые принадлежат пользователю
@@ -39,6 +39,21 @@ public class User {
         this.name = entity.getName();
         this.password = entity.getPassword();
         this.organizationList = entity.getOrganizationList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return login.equals(user.login) &&
+                password.equals(user.password) &&
+                name.equals(user.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login, password, name);
     }
 
     public void addOrganization(Organization organization) {

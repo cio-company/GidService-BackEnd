@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Objects;
 
 /**
  *
@@ -25,7 +26,7 @@ public class Service {
     private Long id;
     private String name;
     private String description;
-    private Integer leadTime; //minutes
+    private String imageUrl;
     private Float price;
 
     //Связь с заведением
@@ -34,18 +35,27 @@ public class Service {
     @JsonIgnore
     private Organization organization;
 
-    public Service(ServiceRequestEntity entity) {
-        this.name = entity.getName();
-        this.description = entity.getDescription();
-        this.leadTime = entity.getLeadTime();
-        this.organization = entity.getOrganization();
-        this.price = entity.getPrice();
-    }
-
     /*
     * TODO:
     *  1. Add keywords system.
     *  2. Add photo(photos)
     */
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Service service = (Service) o;
+        return id.equals(service.id) &&
+                name.equals(service.name) &&
+                description.equals(service.description) &&
+                Objects.equals(imageUrl, service.imageUrl) &&
+                Objects.equals(price, service.price) &&
+                Objects.equals(organization, service.organization);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, imageUrl, price, organization);
+    }
 }

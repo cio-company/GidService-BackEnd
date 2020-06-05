@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  */
 public interface LogsRepository extends JpaRepository<Logs, Long> {
-    Boolean existsLogsByUserIDAndIpEquals(Long id, String s);
-    void deleteAllLogsByUserIDAndIpEquals(Long aLong, String s);
-    Logs getByUserIDAndIp(Long userID, String ip);
+    Boolean existsLogsByUserIDEquals(Long id);
+    void deleteAllLogsByUserIDEquals(Long aLong);
+    Logs getByUserID(Long userID);
 }
